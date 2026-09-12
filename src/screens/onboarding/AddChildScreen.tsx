@@ -166,8 +166,11 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   dobRow: { flexDirection: 'row', gap: spacing.sm },
-  dobInput: { flex: 1, textAlign: 'center' },
-  dobInputYear: { flex: 1.4, textAlign: 'center' },
+  // minWidth: 0 overrides the browser's default <input> intrinsic width on
+  // web, which otherwise stops flexbox from shrinking these below ~170px
+  // each and pushes the year field off-screen in a row this narrow.
+  dobInput: { flex: 1, minWidth: 0, textAlign: 'center' },
+  dobInputYear: { flex: 1.4, minWidth: 0, textAlign: 'center' },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   genderChip: {
     borderWidth: 1.5,

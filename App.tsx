@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -61,16 +61,40 @@ export default function App() {
 
   if (!ready) return null;
 
+  const isWeb = Platform.OS === 'web';
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <SafeAreaProvider>
-        <View style={{ flex: 1, backgroundColor: colors.background }}>
-          <StatusBar style="dark" />
-          <NavigationContainer ref={navigationRef}>
-            <RootNavigator />
-          </NavigationContainer>
+        {/*
+          NUMU is designed as a phone experience. On web (e.g. a desktop
+          browser tab), letting it stretch full-bleed produces the stretched
+          cards / oddly-centered content you'd see on an ultra-wide viewport,
+          so it's constrained to a phone-width column there; native platforms
+          are unaffected (isWeb is false) and just fill the screen normally.
+        */}
+        <View style={isWeb ? styles.webBackdrop : styles.flexFill}>
+          <View style={[styles.flexFill, isWeb && styles.phoneFrame]}>
+            <StatusBar style="dark" />
+            <NavigationContainer ref={navigationRef}>
+              <RootNavigator />
+            </NavigationContainer>
+          </View>
         </View>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  flexFill: { flex: 1, backgroundColor: colors.background },
+  webBackdrop: { flex: 1, backgroundColor: '#DCE6EE', alignItems: 'center' },
+  phoneFrame: {
+    width: '100%',
+    maxWidth: 480,
+    // Web-only CSS passthrough (react-native-web); ignored on native, where phoneFrame isn't applied anyway.
+    ...(Platform.OS === 'web'
+      ? ({ boxShadow: '0 0 0 1px rgba(23,50,77,0.06), 0 24px 60px rgba(23,50,77,0.18)' } as object)
+      : null),
+  },
+});

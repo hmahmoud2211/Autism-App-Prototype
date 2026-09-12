@@ -11,11 +11,11 @@ const OBJECT_POOL: TrialOption[] = [
 ];
 
 const FACE_POOL: TrialOption[] = [
-  { id: 'looking_at_you', emoji: '👀', label: 'Looking at You' },
-  { id: 'looking_away', emoji: '🙈', label: 'Looking Away' },
-  { id: 'eyes_closed', emoji: '😴', label: 'Eyes Closed' },
-  { id: 'looking_down', emoji: '🙄', label: 'Looking Down' },
-  { id: 'looking_up', emoji: '😲', label: 'Looking Up' },
+  { id: 'looking_at_you', label: 'Looking at You', face: { headColor: '#FFC98B', eyes: 'center', mouth: 'smile' } },
+  { id: 'looking_away', label: 'Looking Away', face: { headColor: '#9BD8C9', eyes: 'side', mouth: 'neutral' } },
+  { id: 'eyes_closed', label: 'Eyes Closed', face: { headColor: '#F4A6A6', eyes: 'closed', mouth: 'smile' } },
+  { id: 'looking_down', label: 'Looking Down', face: { headColor: '#A9C7F0', eyes: 'down', mouth: 'neutral' } },
+  { id: 'looking_up', label: 'Looking Up', face: { headColor: '#D8B4F0', eyes: 'up', mouth: 'open' } },
 ];
 
 function optionCountForLevel(level: 1 | 2 | 3): number {

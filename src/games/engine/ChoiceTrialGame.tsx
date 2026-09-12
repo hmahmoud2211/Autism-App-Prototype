@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { AppText } from '@/components/common/AppText';
+import { FaceIllustration, type FaceConfig } from '@/components/games/FaceIllustration';
 import { colors } from '@/constants/colors';
 import { spacing, radius } from '@/constants/spacing';
 
@@ -11,11 +12,14 @@ export interface TrialOption {
   id: string;
   icon?: keyof typeof Ionicons.glyphMap;
   emoji?: string;
+  face?: FaceConfig;
   label: string;
 }
 
 export interface TrialSpec {
   prompt: string;
+  /** An optional stimulus face shown above the prompt (e.g. "which emotion is this?"). */
+  promptFace?: FaceConfig;
   options: TrialOption[];
   correctOptionId: string;
 }
@@ -81,6 +85,11 @@ export function ChoiceTrialGame({ trials, onProgress, onFinish }: ChoiceTrialGam
   return (
     <View style={styles.container}>
       <Animated.View key={trialIndex} entering={FadeIn.duration(200)} style={styles.promptWrap}>
+        {trial.promptFace ? (
+          <View style={styles.promptFaceWrap}>
+            <FaceIllustration {...trial.promptFace} size={104} />
+          </View>
+        ) : null}
         <AppText variant="h2" center>
           {trial.prompt}
         </AppText>
@@ -103,12 +112,18 @@ export function ChoiceTrialGame({ trials, onProgress, onFinish }: ChoiceTrialGam
                 style={styles.optionPad}
               >
                 <View style={[styles.option, { borderColor: feedbackColor }, showFeedback && isCorrectOption && styles.optionCorrectBg]}>
-                  {option.emoji ? (
+                  {option.face ? (
+                    <FaceIllustration {...option.face} size={64} />
+                  ) : option.emoji ? (
                     <AppText style={styles.optionEmoji}>{option.emoji}</AppText>
-                  ) : (
-                    <Ionicons name={option.icon!} size={36} color={showFeedback ? feedbackColor : colors.primary} />
-                  )}
-                  <AppText variant="bodySmall" center style={styles.optionLabel}>
+                  ) : option.icon ? (
+                    <Ionicons name={option.icon} size={36} color={showFeedback ? feedbackColor : colors.primary} />
+                  ) : null}
+                  <AppText
+                    variant={option.face || option.emoji || option.icon ? 'bodySmall' : 'bodyMedium'}
+                    center
+                    style={styles.optionLabel}
+                  >
                     {option.label}
                   </AppText>
                 </View>
@@ -122,8 +137,9 @@ export function ChoiceTrialGame({ trials, onProgress, onFinish }: ChoiceTrialGam
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
-  promptWrap: { marginBottom: spacing.xl },
+  container: { flex: 1, justifyContent: 'flex-start', paddingTop: spacing.xl },
+  promptWrap: { marginBottom: spacing.xl, alignItems: 'center' },
+  promptFaceWrap: { marginBottom: spacing.md },
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   optionPad: { padding: spacing.xs },
   option: {

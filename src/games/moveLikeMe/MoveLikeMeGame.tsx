@@ -80,7 +80,7 @@ export function MoveLikeMeGame({ level, onProgress, onFinish }: GameEngineProps)
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  container: { flex: 1, alignItems: 'center', justifyContent: 'flex-start', paddingTop: spacing.xxxl },
   emoji: { fontSize: 72, marginBottom: spacing.lg },
   label: { marginBottom: spacing.md },
   timer: { marginBottom: spacing.xxl },

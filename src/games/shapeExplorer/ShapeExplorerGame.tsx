@@ -119,7 +119,7 @@ export function ShapeExplorerGame({ level, onProgress, onFinish }: GameEnginePro
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
+  container: { flex: 1, justifyContent: 'flex-start', paddingTop: spacing.xl },
   instructions: { marginBottom: spacing.xl },
   slotRow: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: spacing.md, marginBottom: spacing.xxl },
   slot: {
